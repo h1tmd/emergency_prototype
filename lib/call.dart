@@ -1,6 +1,7 @@
 import 'package:emergency_app/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:linear_timer/linear_timer.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class CallScreen extends StatefulWidget {
   const CallScreen({super.key});
@@ -12,7 +13,6 @@ class CallScreen extends StatefulWidget {
 class _CallScreenState extends State<CallScreen> {
   bool timerDone = false;
   List<Widget> currentOptions = [];
-  Stopwatch callDuration = Stopwatch();
 
   void setOptions() {
     currentOptions = [
@@ -48,15 +48,7 @@ class _CallScreenState extends State<CallScreen> {
     return Center(
       child: Column(
         children: [
-          Text(
-            callDuration.elapsed.toString().split('.').first.padLeft(8, "0"),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          CallDuration(),
           Text(
             "Describe your emergency",
             textAlign: TextAlign.center,
@@ -100,7 +92,6 @@ class _CallScreenState extends State<CallScreen> {
               setState(() {
                 setOptions();
                 timerDone = true;
-                callDuration.start();
               });
             },
           ),
@@ -137,5 +128,44 @@ class _CallScreenState extends State<CallScreen> {
         ),
       ),
     );
+  }
+}
+
+class CallDuration extends StatefulWidget {
+  const CallDuration({super.key});
+
+  @override
+  State<CallDuration> createState() => _CallDurationState();
+}
+
+class _CallDurationState extends State<CallDuration> {
+  final StopWatchTimer _callStopwatch = StopWatchTimer();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _callStopwatch.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _callStopwatch.onStartTimer();
+    return StreamBuilder(
+        stream: _callStopwatch.rawTime,
+        initialData: _callStopwatch.rawTime.value,
+        builder: (context, snapshot) {
+          final value = snapshot.data!;
+          final displayTime = StopWatchTimer.getDisplayTime(value,
+              hours: false, milliSecond: false);
+          return Text(
+            displayTime,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+            ),
+          );
+        });
   }
 }
