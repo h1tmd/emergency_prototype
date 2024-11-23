@@ -22,7 +22,10 @@ class Home extends StatelessWidget {
           color: Colors.white,
           style: IconButton.styleFrom(backgroundColor: AppColors.secondary),
         ),
-        title: Text("ILOILORESPONDr"),
+        title: Text(
+          "RESPONDr.",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
       ),
       body: SafeArea(

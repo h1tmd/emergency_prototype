@@ -16,10 +16,32 @@ class _CallScreenState extends State<CallScreen> {
 
   void setOptions() {
     currentOptions = [
-      optionButton("Fire", [optionButton("Cigarette", [])]),
-      optionButton("Natural Disaster", []),
-      optionButton("Accident", []),
-      optionButton("Medical", [])
+      optionButton("Fire", [
+        optionButton("Ordinary Fire", []),
+        optionButton("Electrical Fire", []),
+        optionButton("Forest Fire", []),
+        optionButton("Gas Fire", []),
+        optionButton("Liquid Fire", [])
+      ]),
+      optionButton("Natural Disaster", [
+        optionButton("Earthquake", []),
+        optionButton("Typhoon", []),
+        optionButton("Flood", []),
+        optionButton("Volcanic", []),
+      ]),
+      optionButton("Accident", [
+        optionButton("Traffic Accident", []),
+        optionButton("Slips, Trips, Falls", []),
+        optionButton("Industrial Accident", []),
+        optionButton("Sports Accidents", []),
+      ]),
+      optionButton("Medical", [
+        optionButton("Overdose", []),
+        optionButton("Poisoning", []),
+        optionButton("Stroke", []),
+        optionButton("Heart Attack", []),
+        optionButton("Seizure", []),
+      ])
     ];
   }
 
@@ -58,30 +80,52 @@ class _CallScreenState extends State<CallScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(24.0),
-              child: ListView(
-                children: currentOptions,
-              ),
-            ),
-          )
+          showOptions(currentOptions),
         ],
       ),
     );
+  }
+
+  Widget showOptions(List<Widget> optionList) {
+    if (optionList.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Text(
+          "Help is on the way! Please DO NOT turn off the device.",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      );
+    } else {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: ListView(
+            children: currentOptions,
+          ),
+        ),
+      );
+    }
   }
 
   Center callTimer(BuildContext context) {
     return Center(
       child: Column(
         children: [
-          SizedBox(height: 128),
-          Text(
-            "Call will start...",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 42,
-              fontWeight: FontWeight.bold,
+          SizedBox(height: 64),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Text(
+              "Now calling nearest responder...",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 42,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           SizedBox(height: 16),
@@ -108,9 +152,9 @@ class _CallScreenState extends State<CallScreen> {
     );
   }
 
-  Widget optionButton(String text, newList) {
+  Widget optionButton(String text, List<Widget> newList) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: ElevatedButton(
         onPressed: () {
           setState(
@@ -119,11 +163,15 @@ class _CallScreenState extends State<CallScreen> {
             },
           );
         },
+        style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Text(
             text,
-            style: TextStyle(color: AppColors.primary, fontSize: 24),
+            textAlign: TextAlign.center,
+            style: TextStyle(color: AppColors.primary, fontSize: 32),
           ),
         ),
       ),
